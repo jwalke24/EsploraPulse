@@ -46,15 +46,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EsploraPulseForm.cs">
+    <Compile Include="Model\PulseReading.cs" />
+    <Compile Include="View\EsploraPulseForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="EsploraPulseForm.Designer.cs">
+    <Compile Include="View\EsploraPulseForm.Designer.cs">
       <DependentUpon>EsploraPulseForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="EsploraPulseForm.resx">
+    <EmbeddedResource Include="View\EsploraPulseForm.resx">
       <DependentUpon>EsploraPulseForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -78,6 +79,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Controller\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
