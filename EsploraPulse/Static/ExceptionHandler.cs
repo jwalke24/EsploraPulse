@@ -18,10 +18,11 @@ namespace EsploraPulse.Static
         /// <summary>
         /// Displays the error message in a MessageBox.
         /// </summary>
-        /// <param name="e">The exception.</param>
-        public static void DisplayErrorMessage(Exception e)
+        /// <param name="title">The title.</param>
+        /// <param name="message">The message.</param>
+        public static void DisplayErrorMessage(string title, string message)
         {
-            MessageBox.Show(e.ToString(), e.Message);
+            MessageBox.Show(title, message, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 }
