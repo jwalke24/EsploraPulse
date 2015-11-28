@@ -48,7 +48,11 @@ namespace EsploraPulse.View
         {
             this.data.Signal = int.Parse(this.EsploraSerial.ReadLine());
             this.controller.CalculatePulse();
-            Console.WriteLine(this.reading.BPM);
+
+            this.Invoke((MethodInvoker) delegate
+            {
+                this.PulseLabel.Text = this.reading.BPM.ToString();
+            });
         }
 
         private void EsploraPulseForm_FormClosing(object sender, FormClosingEventArgs e)

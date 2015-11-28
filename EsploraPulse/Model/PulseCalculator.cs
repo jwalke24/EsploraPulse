@@ -35,7 +35,7 @@ namespace EsploraPulse.Model
 
         public void CalculatePulse()
         {
-            this.data.SampleCounter += 100;
+            this.data.SampleCounter += 10;
             var n = (int)(this.data.SampleCounter - this.data.LastBeatTime);
 
             this.calculateTrough(n);
