@@ -47,7 +47,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controller\EsploraPulseController.cs" />
+    <Compile Include="Model\PulseCalculator.cs" />
     <Compile Include="Model\PulseReading.cs" />
+    <Compile Include="Model\PulseSensorData.cs" />
     <Compile Include="Model\SerialReader.cs" />
     <Compile Include="Static\ExceptionHandler.cs" />
     <Compile Include="View\EsploraPulseForm.cs">

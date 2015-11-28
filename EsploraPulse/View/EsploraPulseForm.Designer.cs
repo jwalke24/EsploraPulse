@@ -28,7 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.PulseLabel = new System.Windows.Forms.Label();
+            this.EsploraSerial = new System.IO.Ports.SerialPort(this.components);
             this.SuspendLayout();
             // 
             // PulseLabel
@@ -49,6 +51,7 @@
             this.Controls.Add(this.PulseLabel);
             this.Name = "EsploraPulseForm";
             this.Text = "Esplora Pulse";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.EsploraPulseForm_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -57,6 +60,7 @@
         #endregion
 
         private System.Windows.Forms.Label PulseLabel;
+        private System.IO.Ports.SerialPort EsploraSerial;
     }
 }
 

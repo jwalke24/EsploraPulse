@@ -1,4 +1,5 @@
-﻿using EsploraPulse.Model;
+﻿using System;
+using EsploraPulse.Model;
 
 namespace EsploraPulse.Controller
 {
@@ -10,14 +11,19 @@ namespace EsploraPulse.Controller
     /// <version>11/27/2015</version>
     class EsploraPulseController
     {
-        private SerialReader reader;
+        private readonly PulseCalculator calculator;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="EsploraPulseController"/> class.
+        /// Initializes a new instance of the <see cref="EsploraPulseController" /> class.
         /// </summary>
-        public EsploraPulseController()
+        public EsploraPulseController(ref PulseReading reading, ref PulseSensorData data)
         {
-            this.reader = new SerialReader();
+            this.calculator = new PulseCalculator(ref reading, ref data);
+        }
+
+        public void CalculatePulse()
+        {
+            this.calculator.CalculatePulse();
         }
     }
 }

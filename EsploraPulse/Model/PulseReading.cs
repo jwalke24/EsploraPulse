@@ -4,7 +4,8 @@ namespace EsploraPulse.Model
 {
     /// <summary>
     /// This class represents a reading of heart rate information, including
-    /// beats per minute and the interbeat interval.
+    /// beats per minute, the interbeat interval, whether a pulse exists, and
+    /// whether a heart beat is presently detected.
     /// </summary>
     /// <author>Jonathan Walker</author>
     /// <version>11/27/2015</version>
@@ -14,15 +15,31 @@ namespace EsploraPulse.Model
         private int ibi;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PulseReading"/> class.
+        /// Initializes a new instance of the <see cref="PulseReading" /> class.
         /// </summary>
-        /// <param name="bpm">The number of beats per minute.</param>
-        /// <param name="ibi">The interbeat interval, in milliseconds.</param>
-        public PulseReading(int bpm, int ibi)
+        public PulseReading()
         {
-            this.BPM = bpm;
-            this.IBI = ibi;
+            this.BPM = 0;
+            this.IBI = 600;
+            this.HeartBeatExists = false;
+            this.HeartBeatDetected = false;
         }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether a heart beat is present.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this a heart beat is present; otherwise, <c>false</c>.
+        /// </value>
+        public bool HeartBeatExists { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether a heart beat has been detected.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if heart beat is detected; otherwise, <c>false</c>.
+        /// </value>
+        public bool HeartBeatDetected { get; set; }
 
         /// <summary>
         /// Gets the beats per minute of the reading. This value represents the number of times a heart beats
@@ -36,7 +53,7 @@ namespace EsploraPulse.Model
         public int BPM
         {
             get { return this.bpm; }
-            private set
+            set
             {
                 if (value < 0)
                 {
@@ -57,7 +74,7 @@ namespace EsploraPulse.Model
         public int IBI
         {
             get { return this.ibi; }
-            private set
+            set
             {
                 if (value < 0)
                 {
