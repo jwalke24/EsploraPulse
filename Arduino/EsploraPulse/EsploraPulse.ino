@@ -1,7 +1,7 @@
 #include <Esplora.h>
 
 const byte CH_TINKERKIT_INA = 8;
-const unsigned long READ_RATE = 10;
+const unsigned long READ_RATE = 50;
 
 unsigned int readChannel(byte channel) {
   digitalWrite(A0, (channel & 1) ? HIGH : LOW);

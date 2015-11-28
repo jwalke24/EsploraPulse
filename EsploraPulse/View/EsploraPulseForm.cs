@@ -39,8 +39,6 @@ namespace EsploraPulse.View
             this.EsploraSerial.PortName = PortName;
             this.EsploraSerial.BaudRate = BaudRate;
             this.EsploraSerial.DtrEnable = true;
-            this.EsploraSerial.Open();
-            this.EsploraSerial.DataReceived += this.onDataReceived;
 
         }
 
@@ -57,7 +55,35 @@ namespace EsploraPulse.View
 
         private void EsploraPulseForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            this.EsploraSerial.Close();
+            if (this.EsploraSerial.IsOpen)
+            {
+                this.EsploraSerial.Close();
+            }
+        }
+
+        private void howToToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(
+                @"Place your finger within the cuff without pressing on the sensor too hard. Wait for the BPM reading to stabilize around a value. That value is your heart rate.", @"How To...",
+                MessageBoxButtons.OK);
+        }
+
+        private void startButton_Click(object sender, EventArgs e)
+        {
+            this.startButton.Enabled = false;
+            this.stopButton.Enabled = true;
+
+            this.EsploraSerial.Open();
+            this.EsploraSerial.DataReceived += this.onDataReceived;
+        }
+
+        private void stopButton_Click(object sender, EventArgs e)
+        {
+            this.stopButton.Enabled = false;
+            this.startButton.Enabled = true;
+
+            this.EsploraSerial.DataReceived -= this.onDataReceived;
+
         }
     }
 }
