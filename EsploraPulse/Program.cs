@@ -1,12 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using EsploraPulse.View;
 
 namespace EsploraPulse
 {
+    /// <summary>
+    /// This class is responsible for executing the application.
+    /// </summary>
+    /// <author>Jonathan Walker</author>
+    /// <version>11/28/2015</version>
     static class Program
     {
         /// <summary>

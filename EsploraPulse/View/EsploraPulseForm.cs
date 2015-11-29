@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Diagnostics;
+using System.IO;
 using System.IO.Ports;
-using System.Threading;
 using System.Windows.Forms;
 using EsploraPulse.Controller;
 using EsploraPulse.Model;
+using EsploraPulse.Static;
 
 namespace EsploraPulse.View
 {
@@ -19,10 +19,10 @@ namespace EsploraPulse.View
         private const string PortName = "COM4";
         private const int BaudRate = 115200;
 
-        private EsploraPulseController controller;
+        private readonly EsploraPulseController controller;
 
-        private PulseReading reading;
-        private PulseSensorData data;
+        private readonly PulseReading reading;
+        private readonly PulseSensorData data;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EsploraPulseForm"/> class.
@@ -44,13 +44,24 @@ namespace EsploraPulse.View
 
         private void onDataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-            this.data.Signal = int.Parse(this.EsploraSerial.ReadLine());
-            this.controller.CalculatePulse();
-
-            this.Invoke((MethodInvoker) delegate
+            try
             {
-                this.PulseLabel.Text = this.reading.BPM.ToString();
-            });
+                int serialData;
+                int.TryParse(this.EsploraSerial.ReadLine(), out serialData);
+
+                this.data.Signal = serialData;
+                this.controller.CalculatePulse();
+
+                this.Invoke((MethodInvoker) delegate
+                {
+                    this.PulseLabel.Text = this.reading.BPM.ToString();
+                });
+            }
+            catch (Exception exception)
+            {
+                throw exception;
+            }
+            
         }
 
         private void EsploraPulseForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -61,19 +72,25 @@ namespace EsploraPulse.View
             }
         }
 
-        private void howToToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show(
-                @"Place your finger within the cuff without pressing on the sensor too hard. Wait for the BPM reading to stabilize around a value. That value is your heart rate.", @"How To...",
-                MessageBoxButtons.OK);
-        }
-
         private void startButton_Click(object sender, EventArgs e)
         {
-            this.startButton.Enabled = false;
-            this.stopButton.Enabled = true;
+            try
+            {
+                this.EsploraSerial.Open();
 
-            this.EsploraSerial.Open();
+                this.startButton.Enabled = false;
+                this.stopButton.Enabled = true;
+                this.emailButton.Enabled = false;
+            }
+            catch (IOException ioException)
+            {
+                ExceptionHandler.DisplayErrorMessage("Serial Port Error", ioException.Message);
+            }
+            catch (UnauthorizedAccessException unauthorizedAccessException)
+            {
+                ExceptionHandler.DisplayErrorMessage("Serial Port Busy", unauthorizedAccessException.Message);
+            } 
+
             this.EsploraSerial.DataReceived += this.onDataReceived;
         }
 
@@ -81,9 +98,37 @@ namespace EsploraPulse.View
         {
             this.stopButton.Enabled = false;
             this.startButton.Enabled = true;
+            this.emailButton.Enabled = true;
 
             this.EsploraSerial.DataReceived -= this.onDataReceived;
+            this.EsploraSerial.Close();
+        }
 
+        private void emailButton_Click(object sender, EventArgs e)
+        {
+            var emailForm = new EmailForm(this.reading.BPM);
+            var result = emailForm.ShowDialog(this);
+
+            if (result == DialogResult.OK)
+            {
+                MessageBox.Show(@"Message Sent!", @"Success");
+            }
+        }
+
+        private void readBPMToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(
+                @"Place your finger within the cuff without pressing on the sensor too hard. " +
+                    @"Wait for the BPM reading to stabilize around a value. That value is your heart rate.", 
+                @"How To: Read BPM", MessageBoxButtons.OK);
+        }
+
+        private void sendEmailToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(
+                @"First press the Start button to begin reading your heart rate. Once you have received your BPM value, click Stop. " +
+                    @"At this point, you will be able to click Send Email and email your BPM to anyone using Gmail as a SMTP host.",
+                @"How To: Send Email", MessageBoxButtons.OK);
         }
     }
 }

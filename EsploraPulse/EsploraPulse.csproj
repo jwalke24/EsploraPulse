@@ -52,6 +52,12 @@
     <Compile Include="Model\PulseSensorData.cs" />
     <Compile Include="Model\SerialReader.cs" />
     <Compile Include="Static\ExceptionHandler.cs" />
+    <Compile Include="View\EmailForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\EmailForm.Designer.cs">
+      <DependentUpon>EmailForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="View\EsploraPulseForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -60,6 +66,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="View\EmailForm.resx">
+      <DependentUpon>EmailForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="View\EsploraPulseForm.resx">
       <DependentUpon>EsploraPulseForm.cs</DependentUpon>
     </EmbeddedResource>

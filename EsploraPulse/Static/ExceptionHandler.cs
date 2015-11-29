@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
 namespace EsploraPulse.Static
 {
@@ -22,7 +17,7 @@ namespace EsploraPulse.Static
         /// <param name="message">The message.</param>
         public static void DisplayErrorMessage(string title, string message)
         {
-            MessageBox.Show(title, message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 }

@@ -17,6 +17,16 @@ namespace EsploraPulse.Model
         private PulseReading reading;
         private PulseSensorData data;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PulseCalculator"/> class.
+        /// </summary>
+        /// <param name="reading">The reading object.</param>
+        /// <param name="data">The data object.</param>
+        /// <exception cref="ArgumentNullException">
+        /// @the pulse reading object cannot be null
+        /// or
+        /// @the pulse sensor data object cannot be null
+        /// </exception>
         public PulseCalculator(ref PulseReading reading, ref PulseSensorData data)
         {
             if (reading == null)
@@ -33,6 +43,9 @@ namespace EsploraPulse.Model
             this.data = data;
         }
 
+        /// <summary>
+        /// Calculates the pulse.
+        /// </summary>
         public void CalculatePulse()
         {
             this.data.SampleCounter += 50;

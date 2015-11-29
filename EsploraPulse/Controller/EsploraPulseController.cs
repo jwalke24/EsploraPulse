@@ -21,6 +21,9 @@ namespace EsploraPulse.Controller
             this.calculator = new PulseCalculator(ref reading, ref data);
         }
 
+        /// <summary>
+        /// Calculates the pulse.
+        /// </summary>
         public void CalculatePulse()
         {
             this.calculator.CalculatePulse();

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace EsploraPulse.Model
 {
@@ -14,7 +13,7 @@ namespace EsploraPulse.Model
 
         private int threshold;
         private int signal;
-        private int[] rate;
+        private readonly int[] rate;
         private int peak;
         private int trough;
         private int amplitude;
