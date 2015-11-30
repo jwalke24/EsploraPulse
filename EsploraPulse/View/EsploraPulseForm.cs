@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.IO;
 using System.IO.Ports;
 using System.Windows.Forms;
@@ -43,6 +44,7 @@ namespace EsploraPulse.View
             this.EsploraSerial.PortName = PortName;
             this.EsploraSerial.BaudRate = BaudRate;
             this.EsploraSerial.DtrEnable = true;
+            this.PulseLabel.ForeColor = Color.Red;
 
             this.intializePulseChart();
             
@@ -59,6 +61,7 @@ namespace EsploraPulse.View
             this.bpmSeries.ChartType = SeriesChartType.Spline;
             this.pulseChart.ChartAreas[this.bpmSeries.ChartArea].AxisX.Title = "Time (milliseconds)";
             this.pulseChart.ChartAreas[this.bpmSeries.ChartArea].AxisY.Title = "Sensor Reading";
+            this.bpmSeries.Color = Color.Red;
         }
 
         private void onDataReceived(object sender, SerialDataReceivedEventArgs e)
