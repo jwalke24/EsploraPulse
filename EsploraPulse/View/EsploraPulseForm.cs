@@ -2,6 +2,7 @@
 using System.IO;
 using System.IO.Ports;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 using EsploraPulse.Controller;
 using EsploraPulse.Model;
 using EsploraPulse.Static;
@@ -18,11 +19,14 @@ namespace EsploraPulse.View
     {
         private const string PortName = "COM4";
         private const int BaudRate = 115200;
+        private const int AxisXMax = 100;
 
         private readonly EsploraPulseController controller;
 
         private readonly PulseReading reading;
         private readonly PulseSensorData data;
+
+        private Series bpmSeries;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EsploraPulseForm"/> class.
@@ -40,6 +44,21 @@ namespace EsploraPulse.View
             this.EsploraSerial.BaudRate = BaudRate;
             this.EsploraSerial.DtrEnable = true;
 
+            this.intializePulseChart();
+            
+        }
+
+        private void intializePulseChart()
+        {
+            this.pulseChart.Series.Clear();
+
+            this.bpmSeries = new Series("BPM");
+            this.pulseChart.Series.Add(this.bpmSeries);
+            this.bpmSeries.XValueType = ChartValueType.Int32;
+            this.bpmSeries.YValueType = ChartValueType.Int32;
+            this.bpmSeries.ChartType = SeriesChartType.Spline;
+            this.pulseChart.ChartAreas[this.bpmSeries.ChartArea].AxisX.Title = "Time (milliseconds)";
+            this.pulseChart.ChartAreas[this.bpmSeries.ChartArea].AxisY.Title = "Sensor Reading";
         }
 
         private void onDataReceived(object sender, SerialDataReceivedEventArgs e)
@@ -52,24 +71,31 @@ namespace EsploraPulse.View
                 this.data.Signal = serialData;
                 this.controller.CalculatePulse();
 
-                this.Invoke((MethodInvoker) delegate
+                Invoke((MethodInvoker) delegate
                 {
                     this.PulseLabel.Text = this.reading.BPM.ToString();
+
+                    if (this.bpmSeries.Points.Count > AxisXMax)
+                    {
+                        this.bpmSeries.Points.RemoveAt(0);
+                    }
+
+                    this.bpmSeries.Points.AddXY(this.data.SampleCounter, this.data.Signal);
+                    this.pulseChart.ResetAutoValues();
+                    
                 });
             }
             catch (Exception exception)
             {
-                throw exception;
+                ExceptionHandler.DisplayErrorMessage("Error", exception.Message);
             }
             
         }
 
         private void EsploraPulseForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (this.EsploraSerial.IsOpen)
-            {
-                this.EsploraSerial.Close();
-            }
+            this.EsploraSerial.DataReceived -= this.onDataReceived;
+            this.EsploraSerial.Close();
         }
 
         private void startButton_Click(object sender, EventArgs e)
