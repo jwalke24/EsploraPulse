@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace EsploraPulse.Model
 {
@@ -14,32 +9,22 @@ namespace EsploraPulse.Model
     /// <version>11/27/2015</version>
     class PulseCalculator
     {
-        private PulseReading reading;
-        private PulseSensorData data;
+        private readonly PulseData data;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PulseCalculator"/> class.
         /// </summary>
-        /// <param name="reading">The reading object.</param>
         /// <param name="data">The data object.</param>
         /// <exception cref="ArgumentNullException">
-        /// @the pulse reading object cannot be null
-        /// or
         /// @the pulse sensor data object cannot be null
         /// </exception>
-        public PulseCalculator(ref PulseReading reading, ref PulseSensorData data)
+        public PulseCalculator(ref PulseData data)
         {
-            if (reading == null)
-            {
-                throw new ArgumentNullException(nameof(reading), @"the pulse reading object cannot be null");
-            }
-
             if (data == null)
             {
                 throw new ArgumentNullException(nameof(data), @"the pulse sensor data object cannot be null");
             }
-
-            this.reading = reading;
+            
             this.data = data;
         }
 
@@ -52,52 +37,16 @@ namespace EsploraPulse.Model
             var n = (int)(this.data.SampleCounter - this.data.LastBeatTime);
 
             this.calculateTrough(n);
-            this.calculatePeak(n);
-
+            this.calculatePeak();
+            
             if (n > 250)
             {
-                if ((this.data.Signal > this.data.Threshold) && (this.reading.HeartBeatExists == false) &&
-                    (n > this.reading.IBI/5*3))
-                {
-                    this.reading.HeartBeatExists = true;
-                    this.reading.IBI = (int)(this.data.SampleCounter - this.data.LastBeatTime);
-                    this.data.LastBeatTime = this.data.SampleCounter;
-
-                    if (this.data.SecondBeat)
-                    {
-                        this.data.SecondBeat = false;
-                        for (var i = 0; i <= 9; i++)
-                        {
-                            this.data.SetRateByIndex(this.reading.IBI, i);
-                        }
-                    }
-
-                    if (this.data.FirstBeat)
-                    {
-                        this.data.FirstBeat = false;
-                        this.data.SecondBeat = true;
-                        return;
-                    }
-
-                    uint runningTotal = 0;
-
-                    for (var i = 0; i <= 8; i++)
-                    {
-                        this.data.SetRateByIndex(this.data.GetRateByIndex(i+1), i);
-                        runningTotal += (uint)this.data.GetRateByIndex(i);
-                    }
-
-                    this.data.SetRateByIndex(this.reading.IBI, 9);
-                    runningTotal += (uint)this.data.GetRateByIndex(9);
-                    runningTotal /= 10;
-                    this.reading.BPM = 60000 / (int)runningTotal;
-                    this.reading.HeartBeatDetected = true;
-                }
+                this.handlePulse(n);   
             }
 
-            if (this.data.Signal < this.data.Threshold && this.reading.HeartBeatExists)
+            if (this.data.Signal < this.data.Threshold && this.data.HeartBeatExists)
             {
-                this.reading.HeartBeatExists = false;
+                this.data.HeartBeatExists = false;
                 this.data.Amplitude = this.data.Peak - this.data.Trough;
                 this.data.Threshold = this.data.Amplitude/2 + this.data.Trough;
                 this.data.Peak = this.data.Threshold;
@@ -115,7 +64,48 @@ namespace EsploraPulse.Model
             }
         }
 
-        private void calculatePeak(int n)
+        private void handlePulse(int n)
+        {
+            if ((this.data.Signal > this.data.Threshold) && (this.data.HeartBeatExists == false) &&
+                    (n > this.data.IBI / 5 * 3))
+            {
+                this.data.HeartBeatExists = true;
+                this.data.IBI = (int)(this.data.SampleCounter - this.data.LastBeatTime);
+                this.data.LastBeatTime = this.data.SampleCounter;
+
+                if (this.data.SecondBeat)
+                {
+                    this.data.SecondBeat = false;
+                    for (var i = 0; i <= 9; i++)
+                    {
+                        this.data.SetRateByIndex(this.data.IBI, i);
+                    }
+                }
+
+                if (this.data.FirstBeat)
+                {
+                    this.data.FirstBeat = false;
+                    this.data.SecondBeat = true;
+                    return;
+                }
+
+                uint runningTotal = 0;
+
+                for (var i = 0; i <= 8; i++)
+                {
+                    this.data.SetRateByIndex(this.data.GetRateByIndex(i + 1), i);
+                    runningTotal += (uint)this.data.GetRateByIndex(i);
+                }
+
+                this.data.SetRateByIndex(this.data.IBI, 9);
+                runningTotal += (uint)this.data.GetRateByIndex(9);
+                runningTotal /= 10;
+                this.data.BPM = 60000 / (int)runningTotal;
+                this.data.HeartBeatDetected = true;
+            }
+        }
+
+        private void calculatePeak()
         {
             if (this.data.Signal > this.data.Threshold && this.data.Signal > this.data.Peak)
             {
@@ -125,12 +115,14 @@ namespace EsploraPulse.Model
 
         private void calculateTrough(int n)
         {
-            if (this.data.Signal < this.data.Threshold && n > this.reading.IBI / 5 * 3)
+            if (this.data.Signal >= this.data.Threshold || n <= this.data.IBI/5*3)
             {
-                if (this.data.Signal < this.data.Trough)
-                {
-                    this.data.Trough = this.data.Signal;
-                }
+                return;
+            }
+
+            if (this.data.Signal < this.data.Trough)
+            {
+                this.data.Trough = this.data.Signal;
             }
         }
     }

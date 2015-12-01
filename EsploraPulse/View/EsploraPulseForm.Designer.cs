@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.PulseLabel = new System.Windows.Forms.Label();
             this.EsploraSerial = new System.IO.Ports.SerialPort(this.components);
             this.menuStrip = new System.Windows.Forms.MenuStrip();
@@ -51,6 +51,7 @@
             // PulseLabel
             // 
             this.PulseLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.PulseLabel.ForeColor = System.Drawing.Color.Red;
             this.PulseLabel.Location = new System.Drawing.Point(461, 44);
             this.PulseLabel.Name = "PulseLabel";
             this.PulseLabel.Size = new System.Drawing.Size(94, 37);
@@ -145,16 +146,16 @@
             // 
             this.pulseChart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            chartArea1.Name = "ChartArea1";
-            this.pulseChart.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            this.pulseChart.Legends.Add(legend1);
+            chartArea2.Name = "ChartArea1";
+            this.pulseChart.ChartAreas.Add(chartArea2);
+            legend2.Name = "Legend1";
+            this.pulseChart.Legends.Add(legend2);
             this.pulseChart.Location = new System.Drawing.Point(12, 196);
             this.pulseChart.Name = "pulseChart";
-            series1.ChartArea = "ChartArea1";
-            series1.Legend = "Legend1";
-            series1.Name = "Series1";
-            this.pulseChart.Series.Add(series1);
+            series2.ChartArea = "ChartArea1";
+            series2.Legend = "Legend1";
+            series2.Name = "Series1";
+            this.pulseChart.Series.Add(series2);
             this.pulseChart.Size = new System.Drawing.Size(936, 300);
             this.pulseChart.TabIndex = 6;
             this.pulseChart.Text = "BPM";
@@ -178,6 +179,7 @@
             this.Name = "EsploraPulseForm";
             this.Text = "Esplora Pulse";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.EsploraPulseForm_FormClosing);
+            this.Load += new System.EventHandler(this.EsploraPulseForm_Load);
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pulseChart)).EndInit();

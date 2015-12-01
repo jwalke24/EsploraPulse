@@ -40,16 +40,16 @@ namespace EsploraPulse.View
             }
             catch (ArgumentException)
             {
-                ExceptionHandler.DisplayErrorMessage("Invalid Input", "Please enter information into every text box.");
+                ErrorHandler.DisplayErrorMessage("Invalid Input", "Please enter information into every text box.");
             }
             catch (FormatException)
             {
-                ExceptionHandler.DisplayErrorMessage("Invalid Input",
+                ErrorHandler.DisplayErrorMessage("Invalid Input",
                     "Please ensure that your email addresses meet the formatting requirements of email addresses (i.e. address@host.domain).");
             }
             catch (SmtpException)
             {
-                ExceptionHandler.DisplayErrorMessage("Authentication Error",
+                ErrorHandler.DisplayErrorMessage("Authentication Error",
                     "There was a problem authenticating your email account. Please ensure your password is correct. " +
                     "If the password is correct, Gmail may be blocking this app from accessing your email. Please check your email for further instructions.");
             }

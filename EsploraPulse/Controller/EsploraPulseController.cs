@@ -16,9 +16,13 @@ namespace EsploraPulse.Controller
         /// <summary>
         /// Initializes a new instance of the <see cref="EsploraPulseController" /> class.
         /// </summary>
-        public EsploraPulseController(ref PulseReading reading, ref PulseSensorData data)
+        public EsploraPulseController(ref PulseData data)
         {
-            this.calculator = new PulseCalculator(ref reading, ref data);
+            if (data == null)
+            {
+                throw new ArgumentNullException(nameof(data), @"The data object cannot be null.");
+            }
+            this.calculator = new PulseCalculator(ref data);
         }
 
         /// <summary>

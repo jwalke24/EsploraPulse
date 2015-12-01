@@ -7,7 +7,7 @@ namespace EsploraPulse.Model
     /// </summary>
     /// <author>Jonathan Walker</author>
     /// <version>11/27/2015</version>
-    class PulseSensorData
+    class PulseData
     {
         private const int RateCapacity = 10;
 
@@ -17,11 +17,13 @@ namespace EsploraPulse.Model
         private int peak;
         private int trough;
         private int amplitude;
+        private int bpm;
+        private int ibi;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PulseSensorData"/> class.
+        /// Initializes a new instance of the <see cref="PulseData"/> class.
         /// </summary>
-        public PulseSensorData()
+        public PulseData()
         {
             this.rate = new int[RateCapacity];
             this.SampleCounter = 0;
@@ -32,6 +34,69 @@ namespace EsploraPulse.Model
             this.Amplitude = 100;
             this.FirstBeat = true;
             this.SecondBeat = false;
+            this.BPM = 0;
+            this.IBI = 600;
+            this.HeartBeatExists = false;
+            this.HeartBeatDetected = false;
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether a heart beat is present.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this a heart beat is present; otherwise, <c>false</c>.
+        /// </value>
+        public bool HeartBeatExists { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether a heart beat has been detected.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if heart beat is detected; otherwise, <c>false</c>.
+        /// </value>
+        public bool HeartBeatDetected { get; set; }
+
+        /// <summary>
+        /// Gets the beats per minute of the reading. This value represents the number of times a heart beats
+        /// in a span of one minute. This number should be lower when a person is resting and higher when
+        /// a person is exercising and/or emotional.
+        /// </summary>
+        /// <value>
+        /// The beats per minute.
+        /// </value>
+        /// <exception cref="ArgumentOutOfRangeException">@bpm must be greater than or equal to zero</exception>
+        public int BPM
+        {
+            get { return this.bpm; }
+            set
+            {
+                if (value < 0)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(value), @"bpm must be greater than or equal to zero");
+                }
+                this.bpm = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets the interbeat interval of the reading. This value represents the time, in milliseconds, between
+        /// individual heart beats. This value varies naturally.
+        /// </summary>
+        /// <value>
+        /// The interbeat interval.
+        /// </value>
+        /// <exception cref="ArgumentOutOfRangeException">@ibi must be greater than or equal to zero</exception>
+        public int IBI
+        {
+            get { return this.ibi; }
+            set
+            {
+                if (value < 0)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(value), @"ibi must be greater than or equal to zero");
+                }
+                this.ibi = value;
+            }
         }
 
         /// <summary>
@@ -76,7 +141,8 @@ namespace EsploraPulse.Model
         }
 
         /// <summary>
-        /// Gets or sets the threshold.
+        /// Gets or sets the threshold sensor value above which a heartbeat is detected.
+        /// This value helps us find the instant moment of a heart beat.
         /// </summary>
         /// <value>
         /// The threshold.
@@ -96,7 +162,7 @@ namespace EsploraPulse.Model
         }
 
         /// <summary>
-        /// Gets or sets the signal from the Pulse Sensor.
+        /// Gets or sets the raw sensor data from the Pulse Sensor.
         /// </summary>
         /// <value>
         /// The signal from the pulse sensor.
@@ -124,7 +190,8 @@ namespace EsploraPulse.Model
         public ulong SampleCounter { get; set; }
 
         /// <summary>
-        /// Gets or sets the time of the last heart beat.
+        /// Gets or sets the time of the last heart beat. This value
+        /// helps determine the interbeat interval (IBI).
         /// </summary>
         /// <value>
         /// The last beat time.
@@ -132,7 +199,7 @@ namespace EsploraPulse.Model
         public ulong LastBeatTime { get; set; }
 
         /// <summary>
-        /// Gets or sets the peak.
+        /// Gets or sets the peak of the pulse waveform.
         /// </summary>
         /// <value>
         /// The peak.
@@ -152,7 +219,7 @@ namespace EsploraPulse.Model
         }
 
         /// <summary>
-        /// Gets or sets the trough.
+        /// Gets or sets the trough of the pulse waveform.
         /// </summary>
         /// <value>
         /// The trough.
@@ -172,7 +239,7 @@ namespace EsploraPulse.Model
         }
 
         /// <summary>
-        /// Gets or sets the amplitude.
+        /// Gets or sets the amplitude of the pulse waveform.
         /// </summary>
         /// <value>
         /// The amplitude.

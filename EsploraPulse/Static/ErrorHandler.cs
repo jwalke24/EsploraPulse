@@ -8,7 +8,7 @@ namespace EsploraPulse.Static
     /// </summary>
     /// <author>Jonathan Walker</author>
     /// <version>11/27/2015</version>
-    static class ExceptionHandler
+    static class ErrorHandler
     {
         /// <summary>
         /// Displays the error message in a MessageBox.

@@ -19,13 +19,12 @@ namespace EsploraPulse.View
     public partial class EsploraPulseForm : Form
     {
         private const string PortName = "COM4";
-        private const int BaudRate = 115200;
+        private const int BaudRate = 9600;
         private const int AxisXMax = 100;
 
         private readonly EsploraPulseController controller;
-
-        private readonly PulseReading reading;
-        private readonly PulseSensorData data;
+        
+        private readonly PulseData data;
 
         private Series bpmSeries;
 
@@ -35,19 +34,18 @@ namespace EsploraPulse.View
         public EsploraPulseForm()
         {
             this.InitializeComponent();
-
-            this.reading = new PulseReading();
-            this.data = new PulseSensorData();
-
-            this.controller = new EsploraPulseController(ref this.reading, ref this.data);
-
+            
+            this.data = new PulseData();
+            this.controller = new EsploraPulseController(ref this.data);
+            
             this.EsploraSerial.PortName = PortName;
             this.EsploraSerial.BaudRate = BaudRate;
             this.EsploraSerial.DtrEnable = true;
-            this.PulseLabel.ForeColor = Color.Red;
+        }
 
+        private void EsploraPulseForm_Load(object sender, EventArgs e)
+        {
             this.intializePulseChart();
-            
         }
 
         private void intializePulseChart()
@@ -74,9 +72,9 @@ namespace EsploraPulse.View
                 this.data.Signal = serialData;
                 this.controller.CalculatePulse();
 
-                Invoke((MethodInvoker) delegate
+                BeginInvoke((MethodInvoker) delegate
                 {
-                    this.PulseLabel.Text = this.reading.BPM.ToString();
+                    this.PulseLabel.Text = this.data.BPM.ToString();
 
                     if (this.bpmSeries.Points.Count > AxisXMax)
                     {
@@ -90,37 +88,44 @@ namespace EsploraPulse.View
             }
             catch (Exception exception)
             {
-                ExceptionHandler.DisplayErrorMessage("Error", exception.Message);
+                ErrorHandler.DisplayErrorMessage("Error", exception.Message);
             }
-            
         }
 
         private void EsploraPulseForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            this.EsploraSerial.DataReceived -= this.onDataReceived;
             this.EsploraSerial.Close();
         }
 
         private void startButton_Click(object sender, EventArgs e)
         {
-            try
+            if (this.EsploraSerial.IsOpen == false)
             {
-                this.EsploraSerial.Open();
-
-                this.startButton.Enabled = false;
-                this.stopButton.Enabled = true;
-                this.emailButton.Enabled = false;
+                try
+                {
+                    this.EsploraSerial.Open();
+                    this.EsploraSerial.DataReceived += this.onDataReceived;
+                }
+                catch (IOException)
+                {
+                    ErrorHandler.DisplayErrorMessage("Serial Port Error",
+                        "Please plug the Arduino Esplora into the " + this.EsploraSerial.PortName + " serial port.");
+                    return;
+                }
+                catch (UnauthorizedAccessException unauthorizedAccessException)
+                {
+                    ErrorHandler.DisplayErrorMessage("Serial Port Busy", unauthorizedAccessException.Message);
+                    return;
+                }
             }
-            catch (IOException ioException)
+            else
             {
-                ExceptionHandler.DisplayErrorMessage("Serial Port Error", ioException.Message);
+                this.EsploraSerial.DataReceived += this.onDataReceived;
             }
-            catch (UnauthorizedAccessException unauthorizedAccessException)
-            {
-                ExceptionHandler.DisplayErrorMessage("Serial Port Busy", unauthorizedAccessException.Message);
-            } 
 
-            this.EsploraSerial.DataReceived += this.onDataReceived;
+            this.startButton.Enabled = false;
+            this.stopButton.Enabled = true;
+            this.emailButton.Enabled = false;
         }
 
         private void stopButton_Click(object sender, EventArgs e)
@@ -130,12 +135,11 @@ namespace EsploraPulse.View
             this.emailButton.Enabled = true;
 
             this.EsploraSerial.DataReceived -= this.onDataReceived;
-            this.EsploraSerial.Close();
         }
 
         private void emailButton_Click(object sender, EventArgs e)
         {
-            var emailForm = new EmailForm(this.reading.BPM);
+            var emailForm = new EmailForm(this.data.BPM);
             var result = emailForm.ShowDialog(this);
 
             if (result == DialogResult.OK)
