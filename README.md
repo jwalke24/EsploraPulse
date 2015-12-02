@@ -22,3 +22,4 @@ An interface for measuring heart rate using a C# Windows Form application, an Ar
 <sub>This Getting Started guide is derived from the Getting Started Guide located on this [page](https://www.sparkfun.com/products/11574) under the documents section. I did not create the Guide. All rights belong to the original authors.</sub>
 
 ### Connect the Pulse Sensor to the Arduino Esplora
+1. Now we have to connect the Pulse Sensor to the Arduino Esplora. The Pulse Sensor is an analog sensor and, as such, requires an analog port to function. This is a problem because the Arduino Esplora doesn't have any easily accessible analog ports. It does, however, have two TinkerKit connectors which just so happen to be analog ports. These connectors are located on the top-right of the Arduino Esplora board (they are the white, three-pronged connectors). ![Esplora Pinout Diagram](https://github.com/jwalke24/EsploraPulse/blob/master/Resources/Images/ArduinoHeaders.PNG "Esplora Pinout")
