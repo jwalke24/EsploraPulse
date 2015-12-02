@@ -2,6 +2,7 @@
 
 const byte CH_TINKERKIT_INA = 8;
 const unsigned long READ_RATE = 50;
+const unsigned int BAUD_RATE = 9600;
 
 unsigned int readChannel(byte channel) {
   digitalWrite(A0, (channel & 1) ? HIGH : LOW);
@@ -12,7 +13,7 @@ unsigned int readChannel(byte channel) {
 }
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(BAUD_RATE);
 
 }
 
