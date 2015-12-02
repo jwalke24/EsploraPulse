@@ -16,7 +16,9 @@ An interface for measuring heart rate using a C# Windows Form application, an Ar
 ## Procedure
 
 ### Prepare the Pulse Sensor
-1. Follow the steps in the Pulse Sensor Getting Started PDF file located in the Repository in the Resources folder. This PDF will guide you through protecting the Pulse Sensor from moisture/oil and yourself from exposed electrical components on the Pulse Sensor.
+1. Follow the steps in the [Pulse Sensor Getting Started](https://github.com/jwalke24/EsploraPulse/blob/master/Resources/PulseSensorGettingStarted.pdf) guide starting at the "Preparing the Pulse Sensor" section. This file will guide you through protecting the Pulse Sensor from moisture/oil and yourself from exposed electrical components on the Pulse Sensor.
 2. You can use either the velcro finger strap or the earlobe clip setup for your Pulse Sensor.
+
+(This Getting Started guide is derived from the Getting Started Guide located on this [page](https://www.sparkfun.com/products/11574) under the documents section. I did not create the Guide. All rights belong to the original authors.)
 
 ### Connect the Pulse Sensor to the Arduino Esplora
