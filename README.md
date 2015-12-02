@@ -1,6 +1,9 @@
 # EsploraPulse
 An interface for measuring heart rate using a C# Windows Form application, an Arduino Esplora microcontroller, and a Pulse Sensor device.
 
+## Images
+![EsploraPulse Application](https://github.com/jwalke24/EsploraPulse/tree/master/Resources/Images/EsploraPulseApp.png "EsploraPulse Application") ![Arduino Esplora Setup](https://github.com/jwalke24/EsploraPulse/tree/master/Resources/Images/EsploraSetup.jpg "Arduino Esplora Setup")
+
 ## Parts
 1. [Arduino Esplora Microcontroller](http://www.amazon.com/s/ref=nb_sb_noss_2?url=search-alias%3Daps&field-keywords=arduino+esplora) (Discontinued; Price varies from ~$25 to $35)
 2. [Pulse Sensor](https://www.sparkfun.com/products/11574) ($24.95)
