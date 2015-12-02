@@ -43,6 +43,6 @@ Now we have to write our Arduino code.
   * The readChannel function is necessary for the Esplora to read the TinkerKit connector as an analog port. DO NOT CHANGE THIS CODE!
   * The setup function runs before the main code. It sets up the Serial port connection with a baud rate of 9600. (9600 bits per second)
   * The loop function reads the sensor and prints it to the Serial port every so often (determined by the READ_RATE).
-4. Press the Arrow at the top of the IDE to upload the code to your Arduino Esplora. This is the only time you should have to do this.
+5. Press the Arrow at the top of the IDE to upload the code to your Arduino Esplora. This is the only time you should have to do this.
 
 ### Writing the C# Code
