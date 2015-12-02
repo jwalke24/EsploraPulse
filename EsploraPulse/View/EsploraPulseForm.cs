@@ -158,12 +158,7 @@ namespace EsploraPulse.View
         {
             // Create an email form and display it.
             var emailForm = new EmailForm(this.data.BPM);
-            var result = emailForm.ShowDialog(this);
-
-            if (result == DialogResult.OK)
-            {
-                MessageBox.Show(@"Message Sent!", @"Success");
-            }
+            emailForm.ShowDialog(this);
         }
 
         private void readBPMToolStripMenuItem_Click(object sender, EventArgs e)

@@ -35,6 +35,7 @@ namespace EsploraPulse.Model
 
         /// <summary>
         /// Calculates the pulse.
+        /// This class is based off of the code found here: https://github.com/WorldFamousElectronics/PulseSensor_Amped_Arduino/blob/master/PulseSensorAmped_Arduino_1dot4/Interrupt.ino.
         /// </summary>
         public void CalculatePulse()
         {
@@ -42,16 +43,16 @@ namespace EsploraPulse.Model
             this.data.SampleCounter += ReadRate;
 
             // Record the time since a heart beat was detected.
-            var n = (int)(this.data.SampleCounter - this.data.LastBeatTime);
+            var timeElapsed = (int)(this.data.SampleCounter - this.data.LastBeatTime);
 
             // Calculate the Peak and Trough of the pulse waveform.
-            this.calculateTrough(n);
+            this.calculateTrough(timeElapsed);
             this.calculatePeak();
             
             // If a heart beat is detected, update the necessary information.
-            if (n > 250)
+            if (timeElapsed > 250)
             {
-                this.handlePulse(n);   
+                this.handlePulse(timeElapsed);   
             }
 
             // If the values are decreasing, the heart beat is over.
@@ -65,7 +66,7 @@ namespace EsploraPulse.Model
             }
 
             // If 2.5 seconds elapse without a heart beat, reset the data to their original values.
-            if (n > 2500)
+            if (timeElapsed > 2500)
             {
                 this.data.Threshold = 512;
                 this.data.Peak = this.data.Threshold;
@@ -76,11 +77,11 @@ namespace EsploraPulse.Model
             }
         }
 
-        private void handlePulse(int n)
+        private void handlePulse(int timeElapsed)
         {
             // A pulse has been detected.
             if ((this.data.Signal > this.data.Threshold) && (this.data.HeartBeatExists == false) &&
-                    (n > this.data.IBI / 5 * 3))
+                    (timeElapsed > this.data.IBI / 5 * 3))
             {
                 // Update the information from the last pulse.
                 this.data.HeartBeatExists = true;

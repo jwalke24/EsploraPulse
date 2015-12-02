@@ -4,6 +4,8 @@ namespace EsploraPulse.Model
 {
     /// <summary>
     /// This class contains data needed by the Pulse Sensor calculations.
+    /// This class is based off the data variables found here: https://github.com/WorldFamousElectronics/PulseSensor_Amped_Arduino/blob/master/PulseSensorAmped_Arduino_1dot4/Interrupt.ino
+    /// and here: https://github.com/WorldFamousElectronics/PulseSensor_Amped_Arduino/blob/master/PulseSensorAmped_Arduino_1dot4/PulseSensorAmped_Arduino_1dot4.ino.
     /// </summary>
     /// <author>Jonathan Walker</author>
     /// <version>11/27/2015</version>

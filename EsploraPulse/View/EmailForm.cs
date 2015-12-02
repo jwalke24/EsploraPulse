@@ -37,24 +37,27 @@ namespace EsploraPulse.View
             try
             {
                 this.sendBPMEmail();
+                MessageBox.Show(@"Message Sent!", @"Success");
             }
             catch (ArgumentException)
             {
                 ErrorHandler.DisplayErrorMessage("Invalid Input", "Please enter information into every text box.");
+                return;
             }
             catch (FormatException)
             {
                 ErrorHandler.DisplayErrorMessage("Invalid Input",
                     "Please ensure that your email addresses meet the formatting requirements of email addresses (i.e. address@host.domain).");
+                return;
             }
             catch (SmtpException)
             {
                 ErrorHandler.DisplayErrorMessage("Authentication Error",
                     "There was a problem authenticating your email account. Please ensure your password is correct. " +
                     "If the password is correct, Gmail may be blocking this app from accessing your email. Please check your email for further instructions.");
+                return;
             }
-
-            this.DialogResult = DialogResult.OK;
+            
             this.Close();
         }
 
