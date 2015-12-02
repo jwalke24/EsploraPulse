@@ -47,3 +47,31 @@ Now we have to write our Arduino code.
 5. Press the Arrow at the top of the IDE to upload the code to your Arduino Esplora. This is the only time you should have to do this.
 
 ### Writing the C# Code
+It is now time to write the rest of our code in C# using Visual Studio 2015.
+
+1. Create a new C# Web Form Application named EsploraPulse. Add folders and classes (Right-click the Project and click Add...) to the project until your directory structure looks like this: ![Project Structure](https://github.com/jwalke24/EsploraPulse/blob/master/Resources/Images/DirectoryStructure.png "Project Structure")
+2. Create the [PulseData](https://github.com/jwalke24/EsploraPulse/blob/master/EsploraPulse/Model/PulseData.cs) class.
+  * This class holds the data necessary for calculating a heart rate.
+3. Create the [PulseCalculator](https://github.com/jwalke24/EsploraPulse/blob/master/EsploraPulse/Model/PulseCalculator.cs) class.
+  * The function of most importance here is CalculatePulse. This is where the raw sensor data is converted into more meaningful information.
+4. Create the [EsploraPulseController](https://github.com/jwalke24/EsploraPulse/blob/master/EsploraPulse/Controller/EsploraPulseController.cs) class.
+  * This class is used by the View classes to communicate with the Model classes. It contains a PulseCalculator object which it instructs to calculate the pulse, whenever such a calculation is necessary.
+5. Create the [ErrorHandler](https://github.com/jwalke24/EsploraPulse/blob/master/EsploraPulse/Static/ErrorHandler.cs) class.
+  * This class has a very simple job. It is used to display any exceptions to the user in a more friendly manner than crashing the Application in a wall of red text.
+6. Create the EsploraPulseForm class.
+  * This class consists of a Designer section and the actual class code.
+  * The Designer is where you will can drag components from the Toolbox and customize the appearance of the form. The form has a menu bar, two labels for BPM, three buttons (Start, Stop, EmailBPM), a Chart, and a Serial Port component (named EsploraSerial). **It is important to make sure that the properties are set as I have them in the source code. A lot of this Designer class is not explicitly coded and is just implemented by the GUI by default.** ![EsploraPulse Form Designer](https://github.com/jwalke24/EsploraPulse/blob/master/Resources/Images/EsploraPulseForm.png "Designer Form")
+  * The [EsploraPulseForm](https://github.com/jwalke24/EsploraPulse/blob/master/EsploraPulse/View/EsploraPulseForm.cs) class contains the necessary setup code for the Serial Port and Chart. It also contains code to tell the controller to calculate the pulse and display the EmailForm.
+7. Create the EmailForm class.
+  * This class consists of a Designer section and the actual class code.
+  * The Designer is where you will can drag components from the Toolbox and customize the appearance of the form. The form has three labels, three text boxes, and two buttons (Send and Cancel). **It is important to make sure that the properties are set as I have them in the source code. A lot of this Designer class is not explicitly coded and is just implemented by the GUI by default.** ![EmailForm](https://github.com/jwalke24/EsploraPulse/blob/master/Resources/Images/EmailForm.png)
+  * The [EmailForm](https://github.com/jwalke24/EsploraPulse/blob/master/EsploraPulse/View/EmailForm.cs) class contains the setup code for the SMTP email client.
+8. After implementing these classes, you should have successfully finished the C# coding portion of the Project.
+  * Make sure you read through the classes I created to get a better understanding of how everything is set up before you try to create the classes from scratch.
+
+### Endgame
+At this point, the project should be ready to run. Just plug in your Arduino Esplora, ensure you uploaded the Arduino code, and click the Start button in Visual Studio.
+  1. Place your finger in the cuff (or clip the sensor to your ear).
+  1. Press Start to begin reading data and drawing the chart.
+  2. Press Stop to pause the chart and readings at a certain value.
+  3. Press EmailBPM to email the current BPM value to anyone of your choice (currently only works to/from gmail addresses).
