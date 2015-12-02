@@ -37,12 +37,12 @@ Now we have to write our Arduino code.
   1. Go to Tools on the Menu bar and set Board to Board: "Arduino Esplora".
   2. Go to Tools on the Menu bar and set Port to the port where you connected the Esplora (i.e. COM4). It should be the only available choice. **Remember this port name for later!**
 4. Now you can enter this code: ![Arduino Code](https://github.com/jwalke24/EsploraPulse/blob/master/Resources/Images/ArduinoCode.PNG "Arduino Code")
-  * The #include <Esplora.h> is necessary for the compiler to recognize the Esplora board.
-  * The CH_TINKERKIT_INA constant is the port on the Arduino Esplora where the Pulse Sensor is connected.
-  * The READ_RATE constant how often, in milliseconds, the Esplora will read from the Pulse Sensor and print the reading to the computer via the Serial port.
-  * The readChannel function is necessary for the Esplora to read the TinkerKit connector as an analog port. DO NOT CHANGE THIS CODE!
-  * The setup function runs before the main code. It sets up the Serial port connection with a baud rate of 9600. (9600 bits per second)
-  * The loop function reads the sensor and prints it to the Serial port every so often (determined by the READ_RATE).
+  1. The #include <Esplora.h> is necessary for the compiler to recognize the Esplora board.
+  2. The CH_TINKERKIT_INA constant is the port on the Arduino Esplora where the Pulse Sensor is connected.
+  3. The READ_RATE constant how often, in milliseconds, the Esplora will read from the Pulse Sensor and print the reading to the computer via the Serial port.
+  4. The readChannel function is necessary for the Esplora to read the TinkerKit connector as an analog port. DO NOT CHANGE THIS CODE!
+  5. The setup function runs before the main code. It sets up the Serial port connection with a baud rate of 9600. (9600 bits per second)
+  6. The loop function reads the sensor and prints it to the Serial port every so often (determined by the READ_RATE).
 5. Press the Arrow at the top of the IDE to upload the code to your Arduino Esplora. This is the only time you should have to do this.
 
 ### Writing the C# Code
