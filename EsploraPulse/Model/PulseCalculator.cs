@@ -9,6 +9,11 @@ namespace EsploraPulse.Model
     /// <version>11/27/2015</version>
     class PulseCalculator
     {
+        // How often data is read through the Serial Port, in milliseconds. 
+        // Ensure this matches the READ_RATE in the Arduino code.
+        private const int ReadRate = 50;
+
+        // This holds the data for the calculations.
         private readonly PulseData data;
 
         /// <summary>
@@ -33,17 +38,23 @@ namespace EsploraPulse.Model
         /// </summary>
         public void CalculatePulse()
         {
-            this.data.SampleCounter += 50;
+            // Increase the total time by the ReadRate.
+            this.data.SampleCounter += ReadRate;
+
+            // Record the time since a heart beat was detected.
             var n = (int)(this.data.SampleCounter - this.data.LastBeatTime);
 
+            // Calculate the Peak and Trough of the pulse waveform.
             this.calculateTrough(n);
             this.calculatePeak();
             
+            // If a heart beat is detected, update the necessary information.
             if (n > 250)
             {
                 this.handlePulse(n);   
             }
 
+            // If the values are decreasing, the heart beat is over.
             if (this.data.Signal < this.data.Threshold && this.data.HeartBeatExists)
             {
                 this.data.HeartBeatExists = false;
@@ -53,6 +64,7 @@ namespace EsploraPulse.Model
                 this.data.Trough = this.data.Threshold;
             }
 
+            // If 2.5 seconds elapse without a heart beat, reset the data to their original values.
             if (n > 2500)
             {
                 this.data.Threshold = 512;
@@ -66,13 +78,16 @@ namespace EsploraPulse.Model
 
         private void handlePulse(int n)
         {
+            // A pulse has been detected.
             if ((this.data.Signal > this.data.Threshold) && (this.data.HeartBeatExists == false) &&
                     (n > this.data.IBI / 5 * 3))
             {
+                // Update the information from the last pulse.
                 this.data.HeartBeatExists = true;
                 this.data.IBI = (int)(this.data.SampleCounter - this.data.LastBeatTime);
                 this.data.LastBeatTime = this.data.SampleCounter;
 
+                // If this isn't the first heart beat detected.
                 if (this.data.SecondBeat)
                 {
                     this.data.SecondBeat = false;
@@ -82,6 +97,7 @@ namespace EsploraPulse.Model
                     }
                 }
 
+                // If this is the first we've found a heart beat.
                 if (this.data.FirstBeat)
                 {
                     this.data.FirstBeat = false;
@@ -89,6 +105,7 @@ namespace EsploraPulse.Model
                     return;
                 }
 
+                // Calculate the BPM using a history of the heart beats.
                 uint runningTotal = 0;
 
                 for (var i = 0; i <= 8; i++)

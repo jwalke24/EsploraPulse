@@ -18,14 +18,20 @@ namespace EsploraPulse.View
     /// <version>11/27/2015</version>
     public partial class EsploraPulseForm : Form
     {
+        // The Serial Port name to read from. Ensure that this name matches the PortName from the Arduino code.
         private const string PortName = "COM4";
+
+        // The rate at which to read data from the Serial Port. Ensure that this value matches the BaudRate from the Arduino code.
         private const int BaudRate = 9600;
+
+        // The maximum number of data points to display on the chart at any one time.
         private const int AxisXMax = 100;
 
         private readonly EsploraPulseController controller;
         
         private readonly PulseData data;
 
+        // The data for the chart.
         private Series bpmSeries;
 
         /// <summary>
@@ -37,7 +43,8 @@ namespace EsploraPulse.View
             
             this.data = new PulseData();
             this.controller = new EsploraPulseController(ref this.data);
-            
+
+            // Set up the Serial Port.
             this.EsploraSerial.PortName = PortName;
             this.EsploraSerial.BaudRate = BaudRate;
             this.EsploraSerial.DtrEnable = true;
@@ -45,6 +52,7 @@ namespace EsploraPulse.View
 
         private void EsploraPulseForm_Load(object sender, EventArgs e)
         {
+            // Set up the Chart.
             this.intializePulseChart();
         }
 
@@ -62,6 +70,12 @@ namespace EsploraPulse.View
             this.bpmSeries.Color = Color.Red;
         }
 
+        /// <summary>
+        /// This code executes when the SerialPort receives data (sensor reading).
+        /// The BPM is calculated, displayed on the screen, and a new data point is added to the chart.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="SerialDataReceivedEventArgs"/> instance containing the event data.</param>
         private void onDataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             try
@@ -94,11 +108,13 @@ namespace EsploraPulse.View
 
         private void EsploraPulseForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            // When the "X" button is clicked, close the Serial Port.
             this.EsploraSerial.Close();
         }
 
         private void startButton_Click(object sender, EventArgs e)
         {
+            // Opens the Serial Port if it is not open already. Either way, the onDataReceived event is attached to the Serial Port.
             if (this.EsploraSerial.IsOpen == false)
             {
                 try
@@ -134,11 +150,13 @@ namespace EsploraPulse.View
             this.startButton.Enabled = true;
             this.emailButton.Enabled = true;
 
+            // Detach the onDataReceivedEvent from the Serial Port to pause the readings.
             this.EsploraSerial.DataReceived -= this.onDataReceived;
         }
 
         private void emailButton_Click(object sender, EventArgs e)
         {
+            // Create an email form and display it.
             var emailForm = new EmailForm(this.data.BPM);
             var result = emailForm.ShowDialog(this);
 
