@@ -75,3 +75,6 @@ At this point, the project should be ready to run. Just plug in your Arduino Esp
   1. Press Start to begin reading data and drawing the chart.
   2. Press Stop to pause the chart and readings at a certain value.
   3. Press EmailBPM to email the current BPM value to anyone of your choice (currently only works to/from gmail addresses).
+
+### Other Notes
+* Don't press too hard on the Pulse Sensor, this will cause your BPM to read as a large (and incorrect) value.
