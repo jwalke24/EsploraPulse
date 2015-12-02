@@ -1,5 +1,5 @@
 # EsploraPulse
-An interface for measuring heart rate using a C# Windows Form application, an Arduino Esplora microcontroller, and a Pulse Sensor device.
+An interface for measuring and visualizing your heart rate using a C# Windows Form application, an Arduino Esplora microcontroller, and a Pulse Sensor device.
 
 ## Images
 ![EsploraPulse Application](https://github.com/jwalke24/EsploraPulse/blob/master/Resources/Images/EsploraPulseApp.png "EsploraPulse Application") ![Arduino Esplora Setup](https://github.com/jwalke24/EsploraPulse/blob/master/Resources/Images/EsploraSetup.jpg "Arduino Esplora Setup")
